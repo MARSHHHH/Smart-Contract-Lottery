@@ -20,17 +20,17 @@ The Smart Contract Lottery allows users to enter a lottery by paying an entrance
 
 ## Requirements
 
-[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) version 2.47.1
-[foundry](https://getfoundry.sh/) version 0.2.0 (e028b92 2024-11-11T00:26:04.968342000Z)
+1. [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) version 2.47.1
+2. [foundry](https://getfoundry.sh/) version 0.2.0 (e028b92 2024-11-11T00:26:04.968342000Z)
 
 
 ## Quickstart
 
-'''
+```
 git clone https://github.com/MARSHHHH/Smart-Contract-Lottery
 cd Smart-Contract-Lottery
 forge build
-'''
+```
 
 # Usage
 
@@ -40,13 +40,13 @@ forge build
 $ make anvil
 ```
 
-## Build
+### Build
 
 ```shell
 $ make build
 ```
 
-## Test
+### Test
 Unite test
 ```shell
 $ make test
@@ -62,5 +62,25 @@ $ forge coverage
 $ make deploy
 ```
 
+## Deployment to a testnet or mainnet
 
-# Smart-Contract-Lottery
+You can choose to be deployed on either sepolia test net or mainnet.
+
+1. Set up environment variables
+
+You need to add your PRIVATE_KEY and RPC_URL to the .env file, example can be find in .env.example.
+
+If you use sepolia testnet, you can get the rpc url from [Alchemy](https://dashboard.alchemy.com/)
+
+If you want to verify your contracy on [Etherscan](https://etherscan.io/), please add you3 `ETHERSCAN_API_KEY`
+
+2. Deploy
+
+```
+make deploy ARGS="--network sepolia"
+```
+This will create ChainliknVRP subscription for you, please feel free to check [Chainlikn ducomentation](https://docs.chain.link/chainlink-automation/compatible-contracts)
+
+# Thank you
+
+Let's get better!
