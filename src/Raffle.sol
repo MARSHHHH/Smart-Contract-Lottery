@@ -20,18 +20,15 @@ contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle__NotEnoughEthSent();
     error Raffle__TransferFailed();
     error Raffle__RaffleNotOpen();
-    error Raffle__UpkeepNotNeeded(
-        uint256 currentBalance,
-        uint256 numPlayers,
-        uint256 raffleState
-    );
+    error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 
     //**Type declarations */
     //Set the state of the raffle
     enum RaffleState {
         OPEN, //0s
         CALCULATING //1
-        // CLOSED //2
+            // CLOSED //2
+
     }
 
     //**State Variables */
@@ -53,7 +50,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
     address private s_recentWinner;
     RaffleState private s_raffleState;
 
-    /**Event */
+    /**
+     * Event
+     */
     event EnterRaffle(address indexed player);
     event WinnerPicked(address indexed winner);
     event RequestedRaffleWinner(uint256 indexed requestId);
@@ -122,9 +121,11 @@ contract Raffle is VRFConsumerBaseV2Plus {
      * 3. The contract has ETH (aka, layers)
      * 4. (Implicit) The subscription is funded with LINK
      */
-    function checkUpkeep(
-        bytes memory /* checkData */
-    ) public view returns (bool upkeepNeeded, bytes memory /* performData */) {
+    function checkUpkeep(bytes memory /* checkData */ )
+        public
+        view
+        returns (bool upkeepNeeded, bytes memory /* performData */ )
+    {
         bool isOpen = RaffleState.OPEN == s_raffleState;
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
         bool hasPlayers = s_players.length > 0;
@@ -137,15 +138,11 @@ contract Raffle is VRFConsumerBaseV2Plus {
      * @dev Once `checkUpkeep` is returning `true`, this function is called
      * and it kicks off a Chainlink VRF call to get a random winner.
      */
-    function performUpkeep(bytes calldata /* performData */) external {
-        (bool upkeepNeeded, ) = checkUpkeep("");
+    function performUpkeep(bytes calldata /* performData */ ) external {
+        (bool upkeepNeeded,) = checkUpkeep("");
         // require(upkeepNeeded, "Upkeep not needed");
         if (!upkeepNeeded) {
-            revert Raffle__UpkeepNotNeeded(
-                address(this).balance,
-                s_players.length,
-                uint256(s_raffleState)
-            );
+            revert Raffle__UpkeepNotNeeded(address(this).balance, s_players.length, uint256(s_raffleState));
         }
 
         //check to see if enought time has passed
@@ -169,7 +166,10 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     //CEI: Check-Effect-Interaction
     function fulfillRandomWords(
-        uint256 /**requestId*/,
+        uint256,
+        /**
+         * requestId
+         */
         uint256[] calldata randomWords
     ) internal override {
         //Checks
@@ -187,7 +187,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
         //Interaction(other contracts)
         //winner.transfer(address(this).balance);
-        (bool success, ) = winner.call{value: address(this).balance}("");
+        (bool success,) = winner.call{value: address(this).balance}("");
         if (!success) {
             revert Raffle__TransferFailed();
         }

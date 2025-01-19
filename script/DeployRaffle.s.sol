@@ -20,21 +20,13 @@ contract DeployRaffle is Script {
         if (config.subscriptionId == 0) {
             console.log("Creating subscription...");
             CreateSubscription createSubscription = new CreateSubscription();
-            (
-                config.subscriptionId,
-                config.vrfCoordinatorV2_5
-            ) = createSubscription.createSubscription(
-                config.vrfCoordinatorV2_5,
-                config.account
-            );
+            (config.subscriptionId, config.vrfCoordinatorV2_5) =
+                createSubscription.createSubscription(config.vrfCoordinatorV2_5, config.account);
             console.log("Subscription created with ID:", config.subscriptionId);
 
             FundSubscription fundSubscription = new FundSubscription();
             fundSubscription.fundSubscription(
-                config.vrfCoordinatorV2_5,
-                config.subscriptionId,
-                config.link,
-                config.account
+                config.vrfCoordinatorV2_5, config.subscriptionId, config.link, config.account
             );
             console.log("Subscription funded.");
 
@@ -60,12 +52,7 @@ contract DeployRaffle is Script {
         console.log("Using vrfCoordinator:", config.vrfCoordinatorV2_5);
         console.log("Subscription ID:", config.subscriptionId);
         console.log("on ChainID", block.chainid);
-        addConsumer.addConsumer(
-            address(raffle),
-            config.vrfCoordinatorV2_5,
-            config.subscriptionId,
-            config.account
-        );
+        addConsumer.addConsumer(address(raffle), config.vrfCoordinatorV2_5, config.subscriptionId, config.account);
         console.log("Raffle contract added as consumer.");
 
         return (raffle, helperConfig);

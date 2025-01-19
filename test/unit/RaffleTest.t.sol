@@ -52,10 +52,7 @@ contract RaffleTest is Test, Constants {
         vm.startPrank(msg.sender);
         if (block.chainid == LOCAL_CHAIN_ID) {
             link.mint(msg.sender, LINK_BALANCE);
-            VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fundSubscription(
-                subscriptionId,
-                LINK_BALANCE
-            );
+            VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fundSubscription(subscriptionId, LINK_BALANCE);
         }
         link.approve(vrfCoordinatorV2_5, LINK_BALANCE);
         vm.stopPrank();
@@ -100,10 +97,7 @@ contract RaffleTest is Test, Constants {
         assert(playerRecorded == PLAYER);
     }
 
-    function testDontAllowPlayersToEnterWhileRaffleIsCalculating()
-        public
-        raffleEnteredAndTimePassed
-    {
+    function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public raffleEnteredAndTimePassed {
         // Arrange
         // modifier used
         raffle.performUpkeep("");
@@ -121,30 +115,24 @@ contract RaffleTest is Test, Constants {
         vm.roll(block.number + 1);
 
         // Act
-        (bool upkeepNeeded, ) = raffle.checkUpkeep("");
+        (bool upkeepNeeded,) = raffle.checkUpkeep("");
 
         // Assert
         assert(!upkeepNeeded);
     }
 
-    function testCheckUpkeepReturnsFalseIfRaffleIsNotOpen()
-        public
-        raffleEnteredAndTimePassed
-    {
+    function testCheckUpkeepReturnsFalseIfRaffleIsNotOpen() public raffleEnteredAndTimePassed {
         // Arrange
         //modifier used
         raffle.performUpkeep("");
 
         // Act
-        (bool upkeepNeeded, ) = raffle.checkUpkeep("");
+        (bool upkeepNeeded,) = raffle.checkUpkeep("");
         // Assert
         assert(upkeepNeeded == false);
     }
 
-    function testCantEnterWhenRaffleIsCalculating()
-        public
-        raffleEnteredAndTimePassed
-    {
+    function testCantEnterWhenRaffleIsCalculating() public raffleEnteredAndTimePassed {
         // Arrange
         //modifier used
         raffle.performUpkeep("");
@@ -155,10 +143,7 @@ contract RaffleTest is Test, Constants {
     }
 
     //PerformUpkeep Test
-    function testCheckUpkeepReturnsFalseIfEnoughTimeHasntPassed()
-        public
-        raffleEnteredAndTimePassed
-    {
+    function testCheckUpkeepReturnsFalseIfEnoughTimeHasntPassed() public raffleEnteredAndTimePassed {
         // Arrange
         //modifier used
 
@@ -201,21 +186,13 @@ contract RaffleTest is Test, Constants {
         uint256 raffleState = 0;
         // Act / Assert
         vm.expectRevert(
-            abi.encodeWithSelector(
-                Raffle.Raffle__UpkeepNotNeeded.selector,
-                currentBalance,
-                numPlayers,
-                raffleState
-            )
+            abi.encodeWithSelector(Raffle.Raffle__UpkeepNotNeeded.selector, currentBalance, numPlayers, raffleState)
         );
         raffle.performUpkeep("");
     }
 
     //test using the output of an event
-    function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId()
-        public
-        raffleEnteredAndTimePassed
-    {
+    function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public raffleEnteredAndTimePassed {
         // Act
         vm.recordLogs();
         raffle.performUpkeep(""); // emits requestId
@@ -251,22 +228,17 @@ contract RaffleTest is Test, Constants {
     //     );
     // }
 
-    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(
-        uint256 randomRequestId
-    ) public raffleEnteredAndTimePassed skipFork {
-        vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
-        //vm.expectRevert("nonexistent request");
-        VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fulfillRandomWords(
-            randomRequestId,
-            address(raffle)
-        );
-    }
-
-    function testFullfillRandomWordsPicksAWinnerResetsAndSendSMoney()
+    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId)
         public
         raffleEnteredAndTimePassed
         skipFork
     {
+        vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
+        //vm.expectRevert("nonexistent request");
+        VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fulfillRandomWords(randomRequestId, address(raffle));
+    }
+
+    function testFullfillRandomWordsPicksAWinnerResetsAndSendSMoney() public raffleEnteredAndTimePassed skipFork {
         // Arrange
         //modifier used
         uint256 additionalEntrants = 5;
@@ -285,10 +257,7 @@ contract RaffleTest is Test, Constants {
         bytes32 requestId = entries[1].topics[1];
 
         //pretend to be chanlink vrf to get the random number and pick winner
-        VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fulfillRandomWords(
-            uint256(requestId),
-            address(raffle)
-        );
+        VRFCoordinatorV2_5Mock(vrfCoordinatorV2_5).fulfillRandomWords(uint256(requestId), address(raffle));
 
         //uint256 previousTimeStamp = raffle.getLastTimeStamp();
 
@@ -298,9 +267,6 @@ contract RaffleTest is Test, Constants {
         assert(raffle.getLengthOfPlayers() == 0);
 
         // assert(previousTimeStamp < raffle.getLastTimeStamp());
-        assert(
-            raffle.getRecentWinner().balance ==
-                prize + STARTING_USER_BALANCE - entranceFee * 2
-        );
+        assert(raffle.getRecentWinner().balance == prize + STARTING_USER_BALANCE - entranceFee * 2);
     }
 }

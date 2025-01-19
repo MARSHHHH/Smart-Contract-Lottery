@@ -47,10 +47,13 @@ $ make build
 ```
 
 ### Test
-Unite test
+
+Unit test
+
 ```shell
 $ make test
 ```
+
 Test Coverage
 ```shell
 $ forge coverage
