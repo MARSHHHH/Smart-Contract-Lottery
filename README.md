@@ -26,6 +26,7 @@ The Smart Contract Lottery allows users to enter a lottery by paying an entrance
 
 ## Quickstart
 
+Clone the repository
 ```
 git clone https://github.com/MARSHHHH/Smart-Contract-Lottery
 cd Smart-Contract-Lottery
