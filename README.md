@@ -6,9 +6,6 @@ This repository contains the implementation of a decentralized lottery system us
 
 The Smart Contract Lottery allows users to enter a lottery by paying an entrance fee. The lottery periodically selects a random winner using Chainlink VRF and transfers the accumulated funds to the winner. The process is automated using Chainlink Keepers.
 
-## Documentation
-https://book.getfoundry.sh/
-
 ## What we want it to do?
 
 1. Users can enter by paying for a ticket.
@@ -19,35 +16,50 @@ https://book.getfoundry.sh/
     Chainlink VRF -> Randomness
     Chainlink Automation -> Time based trigger
 
-## Usage
+# Getting Started
 
-### Build
+## Requirements
+
+[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) version 2.47.1
+[foundry](https://getfoundry.sh/) version 0.2.0 (e028b92 2024-11-11T00:26:04.968342000Z)
+
+
+## Quickstart
+
+'''
+git clone https://github.com/MARSHHHH/Smart-Contract-Lottery
+cd Smart-Contract-Lottery
+forge build
+'''
+
+# Usage
+
+## Start on local chain
 
 ```shell
-$ forge build
+$ make anvil
 ```
 
-### Test
+## Build
 
 ```shell
-$ forge test
+$ make build
 ```
-1. Write some deploy scripts
-2. Write out tests
-    1. On local chain
-    2. Forked Testnet
-    3. Forked Mainnet
 
-### Anvil
-
+## Test
+Unite test
 ```shell
-$ anvil
+$ make test
+```
+Test Coverage
+```shell
+$ forge coverage
 ```
 
 ### Deploy
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ make deploy
 ```
 
 
