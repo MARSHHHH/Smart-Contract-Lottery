@@ -72,7 +72,7 @@ You can choose to be deployed on either sepolia test net or mainnet.
 
 1. Set up environment variables
 
-You need to add your PRIVATE_KEY and RPC_URL to the .env file, example can be find in .env.example.
+You need to add your `PRIVATE_KEY` and `RPC_URL` to the `.env` file, example can be find in `.env.example`.
 
 If you use sepolia testnet, you can get the rpc url from [Alchemy](https://dashboard.alchemy.com/)
 
