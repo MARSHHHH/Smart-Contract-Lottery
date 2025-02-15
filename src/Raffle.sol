@@ -9,6 +9,12 @@ import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFCo
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 import {console} from "forge-std/console.sol";
 
+/**
+ * @title A sample Raffle contract
+ * @author Marsh Zheng
+ * @notice This is for creating a sample Raffle contract
+ * @dev Implements Chainlink VRFv2
+ */
 contract Raffle is VRFConsumerBaseV2Plus {
     //Gas efficient way to create custom errors, instead of using require
     error Raffle__NotEnoughEthSent();
